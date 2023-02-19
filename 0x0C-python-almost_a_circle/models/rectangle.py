@@ -1,27 +1,18 @@
 #!/usr/bin/python3
-"""Module for Rectangle class"""
-
+'''
+    Class Rectangle
+'''
 from models.base import Base
 
 
 class Rectangle(Base):
-    """
-    Class Rectangle used to define a rectangle
-    ...
-    Attributes
-    ----------
-    width : int
-        the width of the rectangle
-    height : int
-        height of the rectangle
-    x : int
-        x coordinate
-    y : int
-        y coordinate
-    """
+    '''
+        Defining the Rectangle class
+        Inherits from:
+            Base
+    '''
 
     def __init__(self, width, height, x=0, y=0, id=None):
-        """Constructor to initialize instances"""
         self.width = width
         self.height = height
         self.x = x
@@ -30,98 +21,120 @@ class Rectangle(Base):
 
     @property
     def width(self):
-        """width getter"""
+        '''
+            Returning private attribute
+        '''
         return self.__width
 
     @width.setter
     def width(self, value):
-        """width setter"""
-        if type(value) is not int:
-            raise TypeError("width must be an integer")
-        if value <= 0:
-            raise ValueError("width must be > 0")
+        '''
+            Setting private attribute
+        '''
+        self.setter_validation("width", value)
         self.__width = value
 
     @property
     def height(self):
-        """height getter"""
+        '''
+            Returning private attribute
+        '''
         return self.__height
 
     @height.setter
     def height(self, value):
-        """height setter"""
-        if type(value) is not int:
-            raise TypeError("height must be an integer")
-        if value <= 0:
-            raise ValueError("height must be > 0")
+        '''
+            Setting private attribute
+        '''
+        self.setter_validation("height", value)
         self.__height = value
 
     @property
     def x(self):
-        """x getter"""
+        '''
+            Returning private attribute
+        '''
         return self.__x
 
     @x.setter
-    def x(self, val):
-        """x setter"""
-        if type(val) is not int:
-            raise TypeError("x must be an integer")
-        if val < 0:
-            raise ValueError("x must be >= 0")
-        self.__x = val
+    def x(self, value):
+        '''
+            Setting private attribute
+        '''
+        self.setter_validation("x", value)
+        self.__x = value
 
     @property
     def y(self):
-        """y getter"""
+        '''
+            Returning private attribute
+        '''
         return self.__y
 
     @y.setter
-    def y(self, val):
-        """y setter"""
-        if type(val) is not int:
-            raise TypeError("y must be an integer")
-        if val < 0:
-            raise ValueError("y must be >= 0")
-        self.__y = val
+    def y(self, value):
+        '''
+            Setting private attribute
+        '''
+        self.setter_validation("y", value)
+        self.__y = value
 
     def area(self):
-        """Return the area of the Rectangle"""
-        return self.width * self.height
+        '''
+            Returns the area of the rectangle
+        '''
+        return (self.height * self.width)
 
     def display(self):
-        """ displays a rectangle """
-        rectangle = self.y * "\n"
+        '''
+            Prints to stdout the representation of the rectangle
+        '''
+        rectangle = ""
+        print("\n" * self.y, end="")
         for i in range(self.height):
-            rectangle += (" " * self.x)
-            rectangle += ("#" * self.width) + "\n"
-
-        print(rectangle, end='')
-
-    def __str__(self):
-        """ str special method """
-        str_rectangle = "[Rectangle] "
-        str_id = "({}) ".format(self.id)
-        str_xy = "{}/{} - ".format(self.x, self.y)
-        str_wh = "{}/{}".format(self.width, self.height)
-
-        return str_rectangle + str_id + str_xy + str_wh
+            rectangle += (" " * self.x) + ("#" * self.width) + "\n"
+        print(rectangle, end="")
 
     def update(self, *args, **kwargs):
-        """ update method """
-        if args is not None and len(args) is not 0:
-            list_atr = ['id', 'width', 'height', 'x', 'y']
-            for i in range(len(args)):
-                setattr(self, list_atr[i], args[i])
-        else:
-            for key, value in kwargs.items():
-                setattr(self, key, value)
+        '''
+            Updates the arguments in the class
+        '''
+        if len(args) == 0:
+            for key, val in kwargs.items():
+                self.__setattr__(key, val)
+            return
+        try:
+            self.id = args[0]
+            self.width = args[1]
+            self.height = args[2]
+            self.x = args[3]
+            self.y = args[4]
+        except IndexError:
+            pass
 
     def to_dictionary(self):
-        """ method that returns a dictionary with properties """
-        list_atr = ['id', 'width', 'height', 'x', 'y']
-        dict_res = {}
+        '''
+            Returns a dictionary representation of this class
+        '''
+        return {'x': getattr(self, "x"),
+                'y': getattr(self, "y"),
+                'id': getattr(self, "id"),
+                'height': getattr(self, "height"),
+                'width': getattr(self, "width")}
 
-        for key in list_atr:
-            dict_res[key] = getattr(self, key)
+    @staticmethod
+    def setter_validation(attribute, value):
+        if type(value) != int:
+            raise TypeError("{} must be an integer".format(attribute))
+        if attribute == "x" or attribute == "y":
+            if value < 0:
+                raise ValueError("{} must be >= 0".format(attribute))
+        elif value <= 0:
+            raise ValueError("{} must be > 0".format(attribute))
 
-        return dict_res
+    def __str__(self):
+        '''
+            Overwritting the str method
+        '''
+        return "[Rectangle] ({}) {}/{} - {}/{}".format(self.id, self.x, self.y,
+                                                       self.width, self.height)

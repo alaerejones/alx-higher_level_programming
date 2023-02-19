@@ -1,3 +1,9 @@
 #!/usr/bin/python3
+# 4-only_diff_elements.py
+
+
 def only_diff_elements(set_1, set_2):
-    return list(set_1 - set_2) + list(set_2 - set_1)
+    """
+    Return a set of all elements present in only one set.
+    """
+    return (set_1 ^ set_2)
