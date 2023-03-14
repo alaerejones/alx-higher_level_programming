@@ -1,1 +1,7 @@
-input in python
+# 0x0B. Python - Input/Output
+
+```diff
+
+- Python
+
+```
